@@ -1,0 +1,35 @@
+version: "3"
+services: 
+  api:
+    build: ./api
+    volumes: 
+      - ./api/:/src
+    ports: 
+      - "5000:5000"
+    environment: 
+      - "TZ=Asia/Tokyo"
+      - "FLASK_APP=./api/__init__.py"
+      - "FLASK_ENV=development"
+    command: "flask run --host 0.0.0.0 --port 5000"
+  db:
+    image: mysql:5.7.34
+    command: mysqld --character-set-server=utf8mb4
+    environment:
+      MYSQL_ROOT_PASSWORD: "mysqlrootpass"
+      MYSQL_DATABASE: "sample01"
+      MYSQL_USER: apiuser
+      MYSQL_PASSWORD: apipasswd
+    volumes:
+      - ./db/db-data:/var/lib/mysql
+      - ./db/init:/docker-entrypoint-initdb.d
+    restart: always
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports: 
+      - 8080:80
+    environment: 
+      PMA_ARBITRARY: "1"
+      PMA_HOST: "db"
+      PMA_USER: apiuser
+      PMA_PASSWORD: apipasswd
