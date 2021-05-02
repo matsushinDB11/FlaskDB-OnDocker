@@ -6,3 +6,5 @@ CREATE TABLE items (
   name TEXT,
   PRIMARY KEY (id)
 );
+
+INSERT INTO items (name) VALUES ( 'Merceds', 'RedBull' );
